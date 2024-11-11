@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: fantasy;
+}
+
+.container {
+    padding: 100px;
+    height: 100vh;
+    background-color: #4f0000;
+}
+
+.header {
+    background-color: black;
+    width: 100vw;
+    height: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+}
+
+img {
+    display: inline-block;
+    max-height: 140%;
+}
