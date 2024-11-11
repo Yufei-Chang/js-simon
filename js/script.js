@@ -17,19 +17,19 @@ function generaNumeriRandom(event) {
       numberElement.textContent = numero + " ";
       numberContainer.appendChild(numberElement);
     }
+    // faccio un timer di 30 secondi e faccio sparire i numeri
     setTimeout(() => {
         numberContainer.innerHTML = '';
       }, 30000);
     
       return numeri;
     }    
-  
 
   btnElem.addEventListener('click', generaNumeriRandom);
 
-// faccio un timer di 30 secondi e faccio sparire i numeri
 
 // creo 5 input in cui l'utente deve inserire i numeri mostrati
+
 // se l'utente inserisce contenuti diversi dai numeri, lo avvisiamo con un alert
 
 // collego input al generatore
