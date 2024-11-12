@@ -1,65 +1,97 @@
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
-const getRandomNumbersArray = (min, max, length) => {
+// Funzioni di appoggio
+const getRandomInt = (min, max) =>
+    Math.floor(Math.random() * (max - min + 1) + min);
+  
+  const getRandomNumbersArray = (min, max, length) => {
     const numsArray = [];
-    for (let i = 0, i < length; i++) {
-        const randomNum = getRandomInt(min, max);
-        numsArray.push(random);
+    for (let i = 0; i < length; i++) {
+      const randomNum = getRandomInt(min, max);
+      numsArray.push(randomNum);
     }
     return numsArray;
-}
-
-const startBtn = document.getElementById("start-btn");
-const numbersListElem = document.getElementById("numbers-list");
-const countdownElem = document.getElementById("countdown");
-const formElem = document.getElementById("form-section");
-const inputList = document.querySelectorAll("input");
-const messageElem = document.getElementById("message");
-
-let numbersArray = [];
-
-const startGame = () => {
+  };
+  
+  ///////////////////////
+  // Elementi html
+  //////////////////////
+  const startBtn = document.getElementById("start-btn");
+  const numbersListElem = document.getElementById("numbers-list");
+  const countdownElem = document.getElementById("countdown");
+  const formElem = document.getElementById("answers-form");
+  const inputsList = document.querySelectorAll("input");
+  const messageElem = document.getElementById("message");
+  
+  ///////////////////////
+  // Variabili globali
+  //////////////////////
+  let numbersArray = [];
+  
+  const clearGame = () => {
     messageElem.innerHTML = "";
     formElem.classList.add("d-none");
-    startBtn.disabled = true;
-    formElem.reset(); 
-    numbersArray = getRandomNumbersArray(1, 100, 5);
-
-    for (let i = 0; i < numbersArray.length; i++) {
-        const curNumber = numbersArray[i];
-        numbersListElem.innerHTML += `<li>${curNumber}</li>`
+    formElem.reset();
+  };
+  
+  const printNumbers = (numbersToShow) => {
+    // Mostro i numeriu random
+    for (let i = 0; i < numbersToShow.length; i++) {
+      const curNumber = numbersToShow[i];
+      numbersListElem.innerHTML += `<li>${curNumber}</li>`;
     }
-    let counter = 30;
+  };
+  
+  const showForm = () => {
+    numbersListElem.innerHTML = "";
+    countdownElem.innerHTML = "";
+    formElem.classList.remove("d-none");
+    startBtn.disabled = false;
+  }
+  
+  const startTimer = (start, end) => {
+    let counter = start;
     const intervalId = setInterval(() => {
-        if (counter = 0) {
+      if (counter >= end) {
         countdownElem.innerHTML = counter--;
-        } else {
-            clearInterval(intervalId);
-            numbersListElem.innerHTML = "";
-            countdownElem.innerHTML = "";
-            formElem.classList.remove("d-none");
-            startBtn.disabled = false;
-            }
-        }
-        , 1000)
-    }
-
-const handleFormSubmit = (event) => {
+      } else {
+        clearInterval(intervalId);
+        showForm();
+      }
+    }, 1000);
+  };
+  
+  const startGame = () => {
+    clearGame();
+    startBtn.disabled = true;
+    numbersArray = getRandomNumbersArray(1, 100, 5);
+    console.log(numbersArray);
+    printNumbers(numbersArray);
+    // Faccio partire il timer
+    startTimer(7, 0);
+  };
+  
+  const handleFormSubmit = (event) => {
     event.preventDefault();
+    console.log("submit");
     const insertedNumbers = [];
-    for (let i = 0; i < inputList.length; i++) {
-        const curInput = inputList[i];
-        insertedNumbers.push(parseInt(curInput.value));
+    for (let i = 0; i < inputsList.length; i++) {
+      const curInput = inputsList[i];
+      insertedNumbers.push(parseInt(curInput.value));
     }
+    console.log(insertedNumbers);
+  
     const correctNumbers = [];
     for (let i = 0; i < insertedNumbers.length; i++) {
-        const curNumber = insertedNumbers[i];
-        if (numbersArray.includes(curNumber)) {
-            correctNumbers.push(curNumber);
-        }
+      const curNumber = insertedNumbers[i];
+      if (numbersArray.includes(curNumber)) {
+        correctNumbers.push(curNumber);
+      }
     }
-    messageElem.innerHTML = `Hai azzeccato ${correctNumbers.length} numeri: ${correctNumbers.join}`
-}
-
-startBtn.addEventListener("click", startGame);
-formElem.addEventListener("submit", handleFormSubmit); 
+    console.log(correctNumbers);
+  
+    messageElem.innerHTML = `Hai azzeccato ${
+      correctNumbers.length
+    } numeri: ${correctNumbers.join(",")}, morirai per aver peccato come un turco`;
+  };
+  
+  startBtn.addEventListener("click", startGame);
+  formElem.addEventListener("submit", handleFormSubmit);
