@@ -1,40 +1,65 @@
-// creo un form generale e converto i valori attributi in valori variabili
-const formElem = document.getElementById("form-section");
-const btnElem = document.getElementById("number-btn");
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-// nel form inserisco un generatore di numeri e genero 5 numeri casuali
-
-function generaNumeriRandom(event) {
-    event.preventDefault();
-    const numeri = [];
-    const numberContainer = document.getElementById('risultato-numeri');
-    numberContainer.innerHTML = '';
-
-    for (let i = 0; i < 5; i++) {
-      const numero = Math.floor(Math.random() * 100) + 1;
-      numeri.push(numero);
-    const numberElement = document.createElement('span');
-      numberElement.textContent = numero + " ";
-      numberContainer.appendChild(numberElement);
+const getRandomNumbersArray = (min, max, length) => {
+    const numsArray = [];
+    for (let i = 0, i < length; i++) {
+        const randomNum = getRandomInt(min, max);
+        numsArray.push(random);
     }
-    // faccio un timer di 30 secondi e faccio sparire i numeri
-    setTimeout(() => {
-        numberContainer.innerHTML = '';
-      }, 30000);
-    
-      return numeri;
-    }    
+    return numsArray;
+}
 
-  btnElem.addEventListener('click', generaNumeriRandom);
+const startBtn = document.getElementById("start-btn");
+const numbersListElem = document.getElementById("numbers-list");
+const countdownElem = document.getElementById("countdown");
+const formElem = document.getElementById("form-section");
+const inputList = document.querySelectorAll("input");
+const messageElem = document.getElementById("message");
 
+let numbersArray = [];
 
-// creo 5 input in cui l'utente deve inserire i numeri mostrati
+const startGame = () => {
+    messageElem.innerHTML = "";
+    formElem.classList.add("d-none");
+    startBtn.disabled = true;
+    formElem.reset(); 
+    numbersArray = getRandomNumbersArray(1, 100, 5);
 
-// se l'utente inserisce contenuti diversi dai numeri, lo avvisiamo con un alert
+    for (let i = 0; i < numbersArray.length; i++) {
+        const curNumber = numbersArray[i];
+        numbersListElem.innerHTML += `<li>${curNumber}</li>`
+    }
+    let counter = 30;
+    const intervalId = setInterval(() => {
+        if (counter = 0) {
+        countdownElem.innerHTML = counter--;
+        } else {
+            clearInterval(intervalId);
+            numbersListElem.innerHTML = "";
+            countdownElem.innerHTML = "";
+            formElem.classList.remove("d-none");
+            startBtn.disabled = false;
+            }
+        }
+        , 1000)
+    }
 
-// collego input al generatore
+const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const insertedNumbers = [];
+    for (let i = 0; i < inputList.length; i++) {
+        const curInput = inputList[i];
+        insertedNumbers.push(parseInt(curInput.value));
+    }
+    const correctNumbers = [];
+    for (let i = 0; i < insertedNumbers.length; i++) {
+        const curNumber = insertedNumbers[i];
+        if (numbersArray.includes(curNumber)) {
+            correctNumbers.push(curNumber);
+        }
+    }
+    messageElem.innerHTML = `Hai azzeccato ${correctNumbers.length} numeri: ${correctNumbers.join}`
+}
 
-// verifico se l'input dell'utente corrisponde ai numeri random del generatore
-
-// mostro il risultato del gioco all'utente
-
+startBtn.addEventListener("click", startGame);
+formElem.addEventListener("submit", handleFormSubmit); 
